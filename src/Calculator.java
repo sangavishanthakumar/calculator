@@ -2,6 +2,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class Calculator {
     // create a calculator with a gui
@@ -78,10 +79,15 @@ public class Calculator {
             final String numbers = String.valueOf(0.0);
 
             public void actionPerformed(ActionEvent e) {
+
                 // get button that was pressed
                 JButton buttonPressed = (JButton) e.getSource();
                 // get the text of the button
                 String buttonText = buttonPressed.getText();
+                // if "invalid input" is displayed, clear the text area
+                if (textArea.getText().equals("Invalid input")) {
+                    textArea.setText("");
+                }
                 switch (buttonText){
                     case "C":
                         textArea.setText("");
@@ -141,12 +147,57 @@ public class Calculator {
                     case ".":
                         textArea.append(".");
                         break;
+                    case "=":
 
+
+                        // evaluate the expression
+                        String expression = textArea.getText();
+                        // check if the input is valid
+                        String pattern = "^-?\\d*\\.?\\d+([+\\-*/]-?\\d*\\.?\\d+)*$";
+                        if(!expression.matches(pattern)){
+                            textArea.setText("Invalid input");
+                            break;
+                        }
+                        // split the expression into numbers and operators
+                        String[] expressionArray = expression.split("(?<=[-+*/])|(?=[-+*/])");
+                        // create an arraylist to store the numbers and operators
+                        ArrayList<String> expressionList = new ArrayList<>(Arrays.asList(expressionArray));
+                        // create an arraylist to store the numbers
+                        ArrayList<Double> numbers = new ArrayList<>();
+                        // create an arraylist to store the operators
+                        ArrayList<String> operators = new ArrayList<>();
+                        // add the numbers and operators to their respective arraylists
+                        for (int i = 0; i < expressionList.size(); i++) {
+                            if (i % 2 == 0) {
+                                numbers.add(Double.parseDouble(expressionList.get(i)));
+                            } else {
+                                operators.add(expressionList.get(i));
+                            }
+                        }
+                        // evaluate the expression
+                        double result = numbers.get(0);
+                        for (int i = 0; i < operators.size(); i++) {
+                            switch (operators.get(i)) {
+                                case "+":
+                                    result += numbers.get(i + 1);
+                                    break;
+                                case "-":
+                                    result -= numbers.get(i + 1);
+                                    break;
+                                case "*":
+                                    result *= numbers.get(i + 1);
+                                    break;
+                                case "/":
+                                    result /= numbers.get(i + 1);
+                                    break;
+                            }
+                        }
+                        textArea.setText(Double.toString(result));
+                        break;
                 }
 
             }
         };
-
 
         button0.addActionListener(buttonListener);
         buttonC.addActionListener(buttonListener);
@@ -167,5 +218,6 @@ public class Calculator {
 
 
     }
+
 
 }
