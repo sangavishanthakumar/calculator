@@ -7,10 +7,15 @@ import java.util.Arrays;
 public class Calculator {
     // create a calculator with a gui
     public static void main(String[] args) {
+
+
         JFrame frame = new JFrame("Calculator");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(300, 400);
         frame.setLayout(new BorderLayout());
+
+        // center the  frame on the screen
+        frame.setLocationRelativeTo(null);
 
         // create the text area to display the numbers
         JTextArea textArea = new JTextArea();
@@ -72,6 +77,7 @@ public class Calculator {
 
         frame.setVisible(true);
 
+        // add a key listener and display the key input in the text area
 
 
         ActionListener buttonListener = new ActionListener() {
@@ -88,7 +94,7 @@ public class Calculator {
                 if (textArea.getText().equals("Invalid input")) {
                     textArea.setText("");
                 }
-                switch (buttonText){
+                switch (buttonText) {
                     case "C":
                         textArea.setText("");
                         break;
@@ -96,6 +102,12 @@ public class Calculator {
                         textArea.append("-");
                         break;
                     case "%":
+                        // if the text area is empty or contains one of the operators, do nothing
+                        if (textArea.getText().equals("+") || textArea.getText().equals("-") || textArea.getText().equals("*") || textArea.getText().equals("/")) {
+
+                            break;
+                        }
+                        // if the text only contains % do nothing TODO
                         // divide the number by 100
                         double number = Double.parseDouble(textArea.getText());
                         number = number / 100;
@@ -149,55 +161,34 @@ public class Calculator {
                         break;
                     case "=":
 
-
                         // evaluate the expression
                         String expression = textArea.getText();
                         // check if the input is valid
                         String pattern = "^-?\\d*\\.?\\d+([+\\-*/]-?\\d*\\.?\\d+)*$";
-                        if(!expression.matches(pattern)){
+                        if (!expression.matches(pattern)) {
                             textArea.setText("Invalid input");
                             break;
                         }
-                        // split the expression into numbers and operators
-                        String[] expressionArray = expression.split("(?<=[-+*/])|(?=[-+*/])");
-                        // create an arraylist to store the numbers and operators
-                        ArrayList<String> expressionList = new ArrayList<>(Arrays.asList(expressionArray));
-                        // create an arraylist to store the numbers
-                        ArrayList<Double> numbers = new ArrayList<>();
-                        // create an arraylist to store the operators
-                        ArrayList<String> operators = new ArrayList<>();
-                        // add the numbers and operators to their respective arraylists
-                        for (int i = 0; i < expressionList.size(); i++) {
-                            if (i % 2 == 0) {
-                                numbers.add(Double.parseDouble(expressionList.get(i)));
-                            } else {
-                                operators.add(expressionList.get(i));
-                            }
+                        // check if the expression is empty
+                        if (expression.equals("")) {
+                            break;
                         }
-                        // evaluate the expression
-                        double result = numbers.get(0);
-                        for (int i = 0; i < operators.size(); i++) {
-                            switch (operators.get(i)) {
-                                case "+":
-                                    result += numbers.get(i + 1);
-                                    break;
-                                case "-":
-                                    result -= numbers.get(i + 1);
-                                    break;
-                                case "*":
-                                    result *= numbers.get(i + 1);
-                                    break;
-                                case "/":
-                                    result /= numbers.get(i + 1);
-                                    break;
-                            }
-                        }
-                        textArea.setText(Double.toString(result));
+
+
+                        CalculatorLogic calculatorLogic = new CalculatorLogic(expression);
+                        // call calculate method
+                        double computedValue = calculatorLogic.calculate();
+                        // make computedValue to string
+                        String computedValueString = Double.toString(computedValue);
+                        textArea.setText(computedValueString);
+
                         break;
                 }
 
             }
+
         };
+
 
         button0.addActionListener(buttonListener);
         buttonC.addActionListener(buttonListener);
@@ -212,9 +203,6 @@ public class Calculator {
         for (int i = 1; i < 10; i++) {
             buttons[i].addActionListener(buttonListener);
         }
-
-
-
 
 
     }
