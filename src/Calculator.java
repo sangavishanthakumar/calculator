@@ -103,15 +103,14 @@ public class Calculator {
                         break;
                     case "%":
                         // if the text area is empty or contains one of the operators, do nothing
-                        if (textArea.getText().equals("+") || textArea.getText().equals("-") || textArea.getText().equals("*") || textArea.getText().equals("/")) {
-
+                        if (textArea.getText().equals("+") || textArea.getText().equals("-") || textArea.getText().equals("*") || textArea.getText().equals("/") || textArea.getText().equals("")) {
                             break;
                         }
-                        // if the text only contains % do nothing TODO
+                        else{
                         // divide the number by 100
-                        double number = Double.parseDouble(textArea.getText());
+                        float number = Float.parseFloat(textArea.getText());
                         number = number / 100;
-                        textArea.setText(Double.toString(number));
+                        textArea.setText(Float.toString(number));}
                         break;
                     case "/":
                         textArea.append("/");
@@ -177,9 +176,9 @@ public class Calculator {
 
                         CalculatorLogic calculatorLogic = new CalculatorLogic(expression);
                         // call calculate method
-                        double computedValue = calculatorLogic.calculate();
+                        float computedValue = calculatorLogic.calculate();
                         // make computedValue to string
-                        String computedValueString = Double.toString(computedValue);
+                        String computedValueString = Float.toString(computedValue);
                         textArea.setText(computedValueString);
 
                         break;
