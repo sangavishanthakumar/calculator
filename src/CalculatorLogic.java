@@ -11,7 +11,6 @@ public class CalculatorLogic {
     public float calculate() throws NumberFormatException, ArithmeticException {
         List<Float> numbers = new ArrayList<>();
         List<Character> operators = new ArrayList<>();
-
         // extract numbers and operators from the expression
         int startIndex = 0;
         for (int i = 0; i < expression.length(); i++) {
@@ -19,9 +18,14 @@ public class CalculatorLogic {
             if (!Character.isDigit(ch) && ch != '.' && ch != '+' && ch != '-' && ch != '*' && ch != '/') {
                 throw new NumberFormatException("Invalid input");
             }
-
             if (ch == '+' || ch == '-' || ch == '*' || ch == '/') {
+                // if the number is negative save the two digits
+                if(expression.charAt(i)=='-' && i==0){
+                    continue;
+                }
+
                 String numStr = expression.substring(startIndex, i).trim();
+                // check if the string is not empty to add it to the numbers list
                 if (!numStr.isEmpty()) {
                     numbers.add(Float.parseFloat(numStr));
                 }
@@ -29,15 +33,13 @@ public class CalculatorLogic {
                 startIndex = i + 1;
             }
         }
-
         // add the last number
-        String numStr = expression.substring(startIndex).trim(); //remove whitespaces
+        String numStr = expression.substring(startIndex).trim();
         if (!numStr.isEmpty()) {
             numbers.add(Float.parseFloat(numStr));
         }
 
-
-        // do multiplication and division first
+        // punkt-vor-strich
         for (int i = 0; i < operators.size(); i++) {
             char op = operators.get(i);
             if (op == '*' || op == '/') {
@@ -60,8 +62,7 @@ public class CalculatorLogic {
                 i--;
             }
         }
-
-        // do addition and subtraction next
+        // do addition and subtraction after multiplication and division
         float result = numbers.get(0);
         for (int i = 0; i < operators.size(); i++) {
             char op = operators.get(i);
@@ -72,7 +73,6 @@ public class CalculatorLogic {
                 result -= rightOperand;
             }
         }
-
         return result;
     }
 }

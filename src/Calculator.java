@@ -1,14 +1,10 @@
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
-import java.util.ArrayList;
-import java.util.Arrays;
 
+// create a calculator with a gui
 public class Calculator {
-    // create a calculator with a gui
     public static void main(String[] args) {
-
-
         JFrame frame = new JFrame("Calculator");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(300, 400);
@@ -39,9 +35,11 @@ public class Calculator {
 
         // create an array for button 0-9
         JButton[] buttons = new JButton[10];
-        // add numbers 1-9 and the symbols in the rightest column
+
         JButton buttonMultiply = null;
         JButton buttonSubtract = null;
+
+        // add numbers 1-9 and the symbols in the rightest column
         for (int i = 1; i < 10; i++) {
             if (i == 4) {
                 buttonMultiply = new JButton("*");
@@ -67,7 +65,6 @@ public class Calculator {
         JButton button0 = new JButton("0");
         buttons[0] = button0;
 
-
         buttonPanel.add(button0);
         JButton buttonDecimal = new JButton(".");
         buttonPanel.add(buttonDecimal);
@@ -78,14 +75,10 @@ public class Calculator {
         frame.setVisible(true);
 
         // add a key listener and display the key input in the text area
-
-
         ActionListener buttonListener = new ActionListener() {
             final String operators = "";
             final String numbers = String.valueOf(0.0);
-
             public void actionPerformed(ActionEvent e) {
-
                 // get button that was pressed
                 JButton buttonPressed = (JButton) e.getSource();
                 // get the text of the button
@@ -159,7 +152,6 @@ public class Calculator {
                         textArea.append(".");
                         break;
                     case "=":
-
                         // evaluate the expression
                         String expression = textArea.getText();
                         // check if the input is valid
@@ -172,23 +164,18 @@ public class Calculator {
                         if (expression.equals("")) {
                             break;
                         }
-
-
+                        // create a new calculatorLogic object
                         CalculatorLogic calculatorLogic = new CalculatorLogic(expression);
                         // call calculate method
                         float computedValue = calculatorLogic.calculate();
                         // make computedValue to string
                         String computedValueString = Float.toString(computedValue);
                         textArea.setText(computedValueString);
-
                         break;
                 }
-
             }
-
         };
-
-
+        // add action listener to the buttons
         button0.addActionListener(buttonListener);
         buttonC.addActionListener(buttonListener);
         buttonSign.addActionListener(buttonListener);
@@ -199,12 +186,9 @@ public class Calculator {
         buttonPlus.addActionListener(buttonListener);
         buttonDecimal.addActionListener(buttonListener);
         buttonEquals.addActionListener(buttonListener);
+        // add action listener to the buttons/numbers 1-9
         for (int i = 1; i < 10; i++) {
             buttons[i].addActionListener(buttonListener);
         }
-
-
     }
-
-
 }
